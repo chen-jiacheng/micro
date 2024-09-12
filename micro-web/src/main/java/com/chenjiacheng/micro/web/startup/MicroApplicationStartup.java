@@ -1,13 +1,14 @@
 package com.chenjiacheng.micro.web.startup;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
+import javax.annotation.Resource;
+import java.util.Arrays;
 
 /**
  * Created by chenjiacheng on 2024/9/11 00:43
@@ -19,13 +20,17 @@ import javax.sql.DataSource;
 @Component
 public class MicroApplicationStartup implements ApplicationRunner {
 
-    @Autowired
-    private ApplicationContext ctx;
+    @Resource
+    private ConfigurableEnvironment environment;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        DataSource dataSource = ctx.getBean(DataSource.class);
-        log.info("datasource: {}",dataSource);
-
+        environment.getPropertySources()
+                .stream()
+                .filter(ps -> ps instanceof EnumerablePropertySource)
+                .map(ps -> (EnumerablePropertySource<?>) ps)
+                .flatMap(ps -> Arrays.stream(ps.getPropertyNames()))
+                .distinct()
+                .forEach(key -> log.info("{} = {}", key, environment.getProperty(key)));
     }
 }

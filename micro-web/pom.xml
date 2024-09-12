@@ -35,6 +35,11 @@
 
         <dependency>
             <groupId>com.chenjiacheng.micro</groupId>
+            <artifactId>micro-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.chenjiacheng.micro</groupId>
             <artifactId>micro-dao</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
